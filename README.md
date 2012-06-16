@@ -8,6 +8,8 @@ About
 
 Unlike conventional truncation that just limits the character length of text, trunk8 measures the content area for spill-over and intelligently chooses the text that best fits in the given space.
 
+Play with the [live demo](http://jrvis.com/trunk8/).
+
 Usage
 -----
 
