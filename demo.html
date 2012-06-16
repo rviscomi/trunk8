@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+	<head>
+		<title>jrvis - Trunk8</title>
+		
+		<style>
+			.wrapper {
+				border: 2px solid #000;
+				line-height: 20px;
+				width: 676px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		
+		<div class="wrapper">
+			<span id="txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
+		</div>
+		
+		<div>
+			<button id="widen">Widen</button>
+			
+			<button id="shorten">Shorten</button>
+		</div>
+		
+		<div>
+			<button id="addline">Add Line</button>
+			
+			<button id="removeline">Remove Line</button>
+		</div>
+		
+		<div>
+			<button id="retrunk8">Retrunk8</button>
+		</div>
+		
+		<div>
+			<label>Left <input type="radio" name="trunk8side" value="left"/></label>
+			
+			<label>Center <input type="radio" name="trunk8side" value="center"/></label>
+			
+			<label>Right <input type="radio" name="trunk8side" value="right" checked/></label>
+		</div>
+		
+		<div>
+			<pre id="settings"></pre>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="/com/jrvis/trunk8/trunk8.js"></script>
+		<script>
+$(document).ready(function () {
+	function updateSettings(settings) {
+		var props = [],
+			prop;
+
+		for (prop in settings) {
+			props.push('    '+prop+': '+settings[prop]);
+		}
+
+		$('#settings').html('settings = {<br/>' + props.join(',<br/>') + '<br/>}');
+	}
+	
+	$('#txt').trunk8();
+
+	updateSettings($('#txt').trunk8('getSettings'));
+
+	$('#widen').click(function () {
+		$('.wrapper').css({
+			width: function () {
+				/* Increment by 25. */
+				return $(this).width() + 25;
+			}
+		});
+
+		$('#txt').trunk8('update');
+	});
+
+	$('#shorten').click(function () {
+		$('.wrapper').css({
+			width: function () {
+				/* Decrement by 25, but do not exceed 75. */
+				return Math.max(75, $(this).width() - 25);
+			}
+		});
+		
+		$('#txt').trunk8('update');
+	});
+
+	$('#retrunk8').click(function () {
+		$('#txt').trunk8('update');
+		updateSettings($('#txt').trunk8('getSettings'));
+	});
+
+	$('#addline').click(function () {
+		/* Get current settings. */
+		var settings = $('#txt').trunk8('getSettings');
+
+		/* Increment the line count. */
+		settings.lines += 1;
+
+		/* Save the new setting. */
+		$('#txt').trunk8({lines: settings.lines});
+
+		/* Update the UI. */
+		updateSettings(settings);
+	});
+
+	$('#removeline').click(function () {
+		/* Get current settings. */
+		var settings = $('#txt').trunk8('getSettings');
+
+		/* Decrement the line count no lower than 1. */
+		settings.lines = (settings.lines - 1) || 1;
+
+		/* Save the new setting. */
+		$('#txt').trunk8({lines: settings.lines});
+
+		/* Update the UI. */
+		updateSettings(settings);
+	});
+
+	$('input[name=trunk8side]:radio').change(function () {
+		$('#txt').trunk8({side: this.value});
+		updateSettings($('#txt').trunk8('getSettings'));
+	});
+});
+		</script>
+	</body>
+</html>
