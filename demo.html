@@ -9,6 +9,11 @@
 				line-height: 20px;
 				width: 676px;
 			}
+			
+			.trunk8-fill {
+				color: #f00;
+				font-weight: bold;
+			}
 		</style>
 	</head>
 	
@@ -40,6 +45,19 @@
 			<label>Center <input type="radio" name="trunk8side" value="center"/></label>
 			
 			<label>Right <input type="radio" name="trunk8side" value="right" checked/></label>
+		</div>
+		
+		<div>
+			<label>
+				Fill
+				
+				<select id="fill">
+					<option value="&amp;hellip;" selected>&hellip;</option>
+					<option value="[snip]">[snip]</option>
+					<option value="&lt;span class=&quot;trunk8-fill&quot;>snip&lt;/span>">&lt;span class=&quot;trunk8-fill&quot;>snip&lt;/span></option>
+					<option value="&amp;nbsp;&lt;a href=&quot;#&quot;>read more&lt;/a>">&nbsp;&lt;a href=&quot;#&quot;>read more&lt;/a></option>
+				</select>
+			</label>
 		</div>
 		
 		<div>
@@ -122,6 +140,11 @@ $(document).ready(function () {
 
 	$('input[name=trunk8side]:radio').change(function () {
 		$('#txt').trunk8({side: this.value});
+		updateSettings($('#txt').trunk8('getSettings'));
+	});
+
+	$('#fill').change(function () {
+		$('#txt').trunk8({fill: this.value});
 		updateSettings($('#txt').trunk8('getSettings'));
 	});
 });
