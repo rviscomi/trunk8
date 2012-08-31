@@ -1,3 +1,14 @@
+/**!
+ * trunk8 jQuery Truncation Plugin
+ * https://github.com/rviscomi/trunk8
+ * 
+ * Copyright 2012 Rick Viscomi
+ * Released under the MIT License.
+ * https://raw.github.com/rviscomi/trunk8/master/LICENSE
+ * 
+ * Date: August 31, 2012
+ */
+
 (function ($) {
 	var methods,
 		utils,
@@ -27,8 +38,8 @@
 			line_height = parseInt(this.css('line-height')) * settings.lines,
 			str = this.attr('title') || this.text(),
 			length = str.length,
-			i = 1,
 			max_bite = '',
+			lower, upper,
 			bite_size,
 			bite;
 		
@@ -44,27 +55,31 @@
 
 			/* Binary search technique for finding the optimal trunkage. */
 			/* Find the maximum bite without overflowing. */
-			bite_size = length >> i; // Halve the length.
+			lower = 0;
+			upper = length - 1;
 
-			do {
-				bite = utils.eatStr(str, side, bite_size, fill);
+			while (lower <= upper) {
+				bite_size = lower + ((upper - lower) >> 1);
+				
+				bite = utils.eatStr(str, side, length - bite_size, fill);
 				
 				this.html(bite);
 
-				i++;
-				
+				/* Check for overflow. */
 				if (this.height() > line_height) {
-					bite_size += length >> i; // Length divided by 2**i
+					upper = bite_size - 1;
 				}
 				else {
-					bite_size -= length >> i; // Length divided by 2**i
+					lower = bite_size + 1;
 
 					/* Save the bigger bite. */
 					max_bite = (max_bite.length > bite.length) ? max_bite : bite;
 				}
 			}
-			while (length >> i > 0);
 
+			/* Reset the content to eliminate possible existing scroll bars. */
+			this.html('');
+			
 			/* Display the biggest bite. */
 			this.html(max_bite);
 			
