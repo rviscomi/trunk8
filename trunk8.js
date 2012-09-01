@@ -1,12 +1,11 @@
 /**!
- * trunk8 jQuery Truncation Plugin
+ * trunk8 v1.2
  * https://github.com/rviscomi/trunk8
  * 
  * Copyright 2012 Rick Viscomi
  * Released under the MIT License.
- * https://raw.github.com/rviscomi/trunk8/master/LICENSE
  * 
- * Date: August 31, 2012
+ * Date: September 1, 2012
  */
 
 (function ($) {
@@ -35,7 +34,7 @@
 		var width = settings.width,
 			side = settings.side,
 			fill = settings.fill,
-			line_height = parseInt(this.css('line-height')) * settings.lines,
+			line_height = utils.getLineHeight(this) * settings.lines,
 			str = this.attr('title') || this.text(),
 			length = str.length,
 			max_bite = '',
@@ -46,7 +45,7 @@
 		/* Reset the field to the original string. */
 		this.html(str);
 
-		if (width === WIDTH.auto) { 
+		if (width === WIDTH.auto) {
 			/* Assuming there is no "overflow: hidden". */
 			if (this.height() <= line_height) {
 				/* Text is already at the optimal trunkage. */
@@ -88,7 +87,7 @@
 			}
 		}
 		else if (!isNaN(width)) {
-			bite_size = width;
+			bite_size = length - width;
 
 			bite = utils.eatStr(str, side, bite_size, fill);
 
@@ -185,6 +184,23 @@
 		        default:
 		        	$.error('Invalid side "' + side + '".');
 		    }
+		},
+		
+		getLineHeight: function (elem) {
+			var html = $(elem).html(),
+				wrapper_id = 'line-height-test',
+				line_height;
+			
+			/* Set the content to a small single character and wrap. */
+			$(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
+			
+			/* Calculate the line height by measuring the wrapper.*/
+			line_height = $('#' + wrapper_id).innerHeight();
+			
+			/* Remove the wrapper and reset the content. */
+			$(elem).html(html).unwrap();
+			
+			return line_height;
 		}
 	};
 
