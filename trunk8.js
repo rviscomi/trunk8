@@ -35,7 +35,7 @@
 			side = settings.side,
 			fill = settings.fill,
 			line_height = utils.getLineHeight(this) * settings.lines,
-			str = this.attr('title') || this.text(),
+			str = this.data('trunk8') || this.text(),
 			length = str.length,
 			max_bite = '',
 			lower, upper,
@@ -43,7 +43,7 @@
 			bite;
 		
 		/* Reset the field to the original string. */
-		this.html(str);
+		this.html(str).data('trunk8', str);
 
 		if (width === WIDTH.auto) {
 			/* Assuming there is no "overflow: hidden". */
@@ -116,7 +116,7 @@
 			return this.each(function () {
 				/* Update text. */
 				if (text) {
-					this.text(text);
+					$(this).data('trunk8', text);
 				}
 
 				/* Truncate accordingly. */
