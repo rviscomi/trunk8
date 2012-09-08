@@ -1,11 +1,11 @@
 /**!
- * trunk8 v1.2.1
+ * trunk8 v1.2.2
  * https://github.com/rviscomi/trunk8
  * 
  * Copyright 2012 Rick Viscomi
  * Released under the MIT License.
  * 
- * Date: September 1, 2012
+ * Date: September 8, 2012
  */
 
 (function ($) {
@@ -121,6 +121,16 @@
 
 				/* Truncate accordingly. */
 				truncate.call($(this));
+			});
+		},
+		
+		revert: function () {
+			return this.each(function () {
+				/* Get original text. */
+				var text = $(this).data('trunk8');
+				
+				/* Revert element to original text. */
+				$(this).html(text);
 			});
 		},
 
