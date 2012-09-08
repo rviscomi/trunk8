@@ -63,10 +63,24 @@ $('.too-long').trunk8({
 ```
 
 **update**
-Updates the text value of the targeted HTML elements while maintaining truncation. This method can be used to recalculate the truncation after a reflow, especially after changing the text itself or its container size.
+Updates the text value of the targeted HTML elements while maintaining truncation.
 
 ```js
-$('.too-long').trunk8('update');
+/* Truncate the original text. */
+$('.too-long').trunk8(); // Lorem ipsum...
+
+/* Define the new text. */
+var new_string = 'Torquent sollicitudin.';
+
+/* Truncate the new text. */
+$('.too-long').trunk8('update', new_string); // Torquent so...
+```
+
+**revert**
+Reverts the text value of the targeted HTML elements to their untruncated states.
+
+```js
+$('.too-long').trunk8('revert'); // Torquent sollicitudin.
 ```
 
 **getSettings**
