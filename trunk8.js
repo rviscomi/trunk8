@@ -1,11 +1,11 @@
 /**!
- * trunk8 v1.2.2
+ * trunk8 v1.2.3
  * https://github.com/rviscomi/trunk8
  * 
  * Copyright 2012 Rick Viscomi
  * Released under the MIT License.
  * 
- * Date: September 8, 2012
+ * Date: September 9, 2012
  */
 
 (function ($) {
@@ -112,11 +112,11 @@
 		},
 
 		/** Updates the text value of the elements while maintaining truncation. */
-		update: function (text) {
+		update: function (new_string) {
 			return this.each(function () {
 				/* Update text. */
-				if (text) {
-					$(this).data('trunk8', text);
+				if (new_string) {
+					$(this).data('trunk8', new_string);
 				}
 
 				/* Truncate accordingly. */

@@ -10,6 +10,8 @@ Unlike conventional truncation that just limits the character length of text, tr
 
 Play with the [live demo](http://jrvis.com/trunk8/).
 
+*Bonus: [Global heatmap of trunk8 stargazers](http://jrvis.com/trunk8/stars.html).*
+
 Usage
 -----
 
@@ -22,10 +24,10 @@ By default, trunk8 will add an ellipsis (`&hellip;`) after the truncated text.
 
 **Method Invocation**
 ```js
-$('.too-long').trunk8('update'); // Lorem ipsum dolor sit amet, consect…
+$('.too-long').trunk8('update', new_string); // Lorem ipsum dolor sit amet, consect…
 ```
 
-To invoke built-in trunk8 methods, supply the method name as a string. See the section below entitled Methods for a full specification.
+To invoke built-in trunk8 methods, supply the method name as a string. Method arguments are listed after the method name as necessary. See the section below entitled Methods for a full specification.
 
 **Custom Settings**
 ```js
