@@ -1,5 +1,5 @@
 /**!
- * trunk8 v1.3
+ * trunk8 v1.3.1
  * https://github.com/rviscomi/trunk8
  * 
  * Copyright 2012 Rick Viscomi
@@ -25,7 +25,7 @@
 	
 	function trunk8(element) {
 		this.$element = $(element);
-		this.original_text = this.$element.text();
+		this.original_text = this.$element.html();
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
 	
