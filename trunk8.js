@@ -221,8 +221,8 @@
 	            }
 	
 	            var html = $(elem).html(),
-					        wrapper_id = 'line-height-test',
-					        line_height;
+		        wrapper_id = 'line-height-test',
+		        line_height;
 	
 	            /* Set the content to a small single character and wrap. */
 	            $(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
