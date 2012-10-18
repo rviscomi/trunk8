@@ -211,21 +211,30 @@
 		},
 		
 		getLineHeight: function (elem) {
-			var html = $(elem).html(),
-				wrapper_id = 'line-height-test',
-				line_height;
-			
-			/* Set the content to a small single character and wrap. */
-			$(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
-			
-			/* Calculate the line height by measuring the wrapper.*/
-			line_height = $('#' + wrapper_id).innerHeight();
-			
-			/* Remove the wrapper and reset the content. */
-			$(elem).html(html).unwrap();
-			
-			return line_height;
-		}
+	            var float = $(elem).css('float');
+	            if (float !== 'none') {
+	                $(elem).css('float', 'none');
+	            }
+	            var pos = $(elem).css('position');
+	            if (pos === 'absolute') {
+	                $(elem).css('position', 'static');
+	            }
+	
+	            var html = $(elem).html(),
+		        wrapper_id = 'line-height-test',
+		        line_height;
+	
+	            /* Set the content to a small single character and wrap. */
+	            $(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
+	
+	            /* Calculate the line height by measuring the wrapper.*/
+	            line_height = $('#' + wrapper_id).innerHeight();
+	
+	            /* Remove the wrapper and reset the content. */
+	            $(elem).html(html).css({ 'float': float, 'position': pos }).unwrap();
+	
+	            return line_height;
+	        }
 	};
 
 	utils.eatStr.cache = {};
