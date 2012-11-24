@@ -150,7 +150,7 @@
 
 		/** Returns this instance's settings object. NOT CHAINABLE. */
 		getSettings: function () {
-			return this.get(0).data('trunk8').settings;
+			return $(this.get(0)).data('trunk8').settings;
 		}
 	};
 
