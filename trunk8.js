@@ -211,8 +211,8 @@
 		},
 		
 		getLineHeight: function (elem) {
-	            var float = $(elem).css('float');
-	            if (float !== 'none') {
+	            var floats = $(elem).css('float');
+	            if (floats !== 'none') {
 	                $(elem).css('float', 'none');
 	            }
 	            var pos = $(elem).css('position');
@@ -231,7 +231,7 @@
 	            line_height = $('#' + wrapper_id).innerHeight();
 	
 	            /* Remove the wrapper and reset the content. */
-	            $(elem).html(html).css({ 'float': float, 'position': pos }).unwrap();
+	            $(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
 	
 	            return line_height;
 	        }
