@@ -45,10 +45,12 @@
 			max_bite = '',
 			lower, upper,
 			bite_size,
-			bite;
-		
+			bite,
+			text;
+
 		/* Reset the field to the original string. */
 		this.html(str);
+		text = this.text();
 
 		if (width === WIDTH.auto) {
 			/* Assuming there is no "overflow: hidden". */
@@ -88,7 +90,7 @@
 			this.html(max_bite);
 			
 			if (settings.tooltip) {
-				this.attr('title', str);
+				this.attr('title', text);
 			}
 		}
 		else if (!isNaN(width)) {
