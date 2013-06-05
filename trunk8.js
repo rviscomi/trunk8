@@ -33,12 +33,91 @@
 		this.settings = $.extend(this.settings, options);
 	};
 
+	function stripHTML(html) {
+		var tmp = document.createElement("DIV");
+		tmp.innerHTML = html;
+		return tmp.textContent||tmp.innerText;
+	}
+
+	function getHtmlArr(str) {
+		/* Builds an array of strings and designated */
+		/* HTML tags around them. */
+		if (stripHTML(str) === str) {
+			return str.splite(/\s/g);
+		}
+		var allResults = [],
+			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)|(\w+['.?!,]*\w?|<br\s?\/?>)/ig,
+			outArr = reg.exec(str),
+			lastI,
+			ind;
+		while (outArr && lastI !== reg.lastIndex) {
+			lastI = reg.lastIndex;
+			if (outArr[4]) {
+				allResults.push(outArr[4]);
+			} else {
+				allResults.push({
+					tag: outArr[1],
+					attribs: outArr[2],
+					content: outArr[3]	
+				});
+			}
+			outArr = reg.exec(str);
+		}
+		for (ind = 0; ind < allResults.length; ind++) {
+			if (typeof allResults[ind] !== 'string'
+					&& allResults[ind].content) {
+				allResults[ind].content = getHtmlArr(allResults[ind].content);
+			}
+		}
+		return allResults;
+	}
+
+	function rebuildHtmlFromBite(bite, htmlObject, fill) {
+		// Take the processed bite after binary-search
+		// trunkated and re-build the original HTML
+		// tags around the processed string.
+		bite = bite.replace(fill, '');
+		var biteHelper = function(contentArr) {
+			var retStr = '',
+				content,
+				biteContent,
+				biteLength,
+				nextWord,
+				i = 0;
+			for (i = 0; i < contentArr.length; i++) {
+				content = contentArr[i];
+				biteLength = $.trim(bite).split(' ').length;
+				if ($.trim(bite).length) {
+					if (typeof content === 'string') {
+						if (!/<br\s*\/?>/.test(content)) {
+							if (biteLength === 1 && bite.length < content.length) {
+								content = bite + fill;
+								bite = '';
+							} else {
+								bite = bite.replace(content, '');
+							}
+						}
+						retStr += content + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');	
+					} else {
+						biteContent = biteHelper(content.content);
+						if (biteContent) {
+							retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'> ';	
+						}
+					}
+				}
+			}	
+			return retStr;
+		};		
+		return biteHelper(htmlObject);	
+	}
+
 	function truncate() {
 		var data = this.data('trunk8'),
 			settings = data.settings,
 			width = settings.width,
 			side = settings.side,
 			fill = settings.fill,
+			parseHTML = settings.parseHTML,
 			line_height = utils.getLineHeight(this) * settings.lines,
 			str = data.original_text,
 			length = str.length,
@@ -46,11 +125,20 @@
 			lower, upper,
 			bite_size,
 			bite,
-			text;
+			text,
+			htmlObject;
 
 		/* Reset the field to the original string. */
 		this.html(str);
 		text = this.text();
+
+		/* If string has HTML and parse HTML is set, build */
+		/* the data struct to house the tags */
+		if (parseHTML && stripHTML(str) !== str) {
+			htmlObject = getHtmlArr(str);
+			str = stripHTML(str);
+			length = str.length;
+		}
 
 		if (width === WIDTH.auto) {
 			/* Assuming there is no "overflow: hidden". */
@@ -68,6 +156,10 @@
 				bite_size = lower + ((upper - lower) >> 1);
 				
 				bite = utils.eatStr(str, side, length - bite_size, fill);
+
+				if (parseHTML && htmlObject) {
+					bite = rebuildHtmlFromBite(bite, htmlObject, fill);	
+				}
 				
 				this.html(bite);
 
@@ -262,6 +354,7 @@
 		lines: 1,
 		side: SIDES.right,
 		tooltip: true,
-		width: WIDTH.auto
+		width: WIDTH.auto,
+		parseHTML: false
 	};
 })(jQuery);
