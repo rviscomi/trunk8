@@ -43,7 +43,7 @@
 		/* Builds an array of strings and designated */
 		/* HTML tags around them. */
 		if (stripHTML(str) === str) {
-			return str.splite(/\s/g);
+			return str.split(/\s/g);
 		}
 		var allResults = [],
 			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)|(\w+['.?!,]*\w?|<br\s?\/?>)/ig,
