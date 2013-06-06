@@ -74,7 +74,7 @@
 
 	function rebuildHtmlFromBite(bite, htmlObject, fill) {
 		// Take the processed bite after binary-search
-		// trunkated and re-build the original HTML
+		// truncated and re-build the original HTML
 		// tags around the processed string.
 		bite = bite.replace(fill, '');
 		var biteHelper = function(contentArr) {
@@ -83,7 +83,7 @@
 				biteContent,
 				biteLength,
 				nextWord,
-				i = 0;
+				i;
 			for (i = 0; i < contentArr.length; i++) {
 				content = contentArr[i];
 				biteLength = $.trim(bite).split(' ').length;
