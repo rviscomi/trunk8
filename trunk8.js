@@ -90,7 +90,7 @@
 				if ($.trim(bite).length) {
 					if (typeof content === 'string') {
 						if (!/<br\s*\/?>/.test(content)) {
-							if (biteLength === 1 && bite.length < content.length) {
+							if (biteLength === 1 && $.trim(bite).length < content.length) {
 								content = bite + fill;
 								bite = '';
 							} else {
