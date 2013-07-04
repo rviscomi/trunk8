@@ -40,6 +40,7 @@
 			side = settings.side,
 			fill = settings.fill,
 			line_height = utils.getLineHeight(this) * settings.lines,
+			cssClass = settings.cssClass,
 			str = data.original_text,
 			length = str.length,
 			max_bite = '',
@@ -92,6 +93,10 @@
 			if (settings.tooltip) {
 				this.attr('title', text);
 			}
+			
+			if (cssClass) {
+				this.addClass(cssClass);
+			}
 		}
 		else if (!isNaN(width)) {
 			bite_size = length - width;
@@ -102,6 +107,10 @@
 			
 			if (settings.tooltip) {
 				this.attr('title', str);
+			}
+			
+			if (cssClass) {
+				this.addClass(cssClass);
 			}
 		}
 		else {
@@ -142,11 +151,17 @@
 		
 		revert: function () {
 			return this.each(function () {
+				var
+					data = $(this).data('trunk8')
+				;
 				/* Get original text. */
-				var text = $(this).data('trunk8').original_text;
+				var text = data.original_text;
 				
 				/* Revert element to original text. */
 				$(this).html(text);
+				
+				/* Remove added css class */
+				$(this).removeClass(data.settings.cssClass);
 			});
 		},
 
@@ -262,6 +277,7 @@
 		lines: 1,
 		side: SIDES.right,
 		tooltip: true,
-		width: WIDTH.auto
+		width: WIDTH.auto,
+		cssClass: null
 	};
 })(jQuery);
