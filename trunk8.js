@@ -46,26 +46,27 @@
 			return str.split(/\s/g);
 		}
 		var allResults = [],
-			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)|(\w+['.?!,]*\w?|<br\s?\/?>)/ig,
+			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
 			outArr = reg.exec(str),
 			lastI,
 			ind;
 		while (outArr && lastI !== reg.lastIndex) {
 			lastI = reg.lastIndex;
-			if (outArr[4]) {
-				allResults.push(outArr[4]);
-			} else {
+			if (outArr[5]) {
+				allResults.push(outArr[5]);
+			} else if (outArr[1]) {
 				allResults.push({
 					tag: outArr[1],
 					attribs: outArr[2],
-					content: outArr[3]	
+					content: outArr[3],
+					after: outArr[4]
 				});
 			}
 			outArr = reg.exec(str);
 		}
 		for (ind = 0; ind < allResults.length; ind++) {
-			if (typeof allResults[ind] !== 'string'
-					&& allResults[ind].content) {
+			if (typeof allResults[ind] !== 'string' &&
+					allResults[ind].content) {
 				allResults[ind].content = getHtmlArr(allResults[ind].content);
 			}
 		}
@@ -97,18 +98,20 @@
 								bite = bite.replace(content, '');
 							}
 						}
-						retStr += content + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');	
+						retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
 					} else {
 						biteContent = biteHelper(content.content);
+						if (content.after) bite = bite.replace(content.after, '');
 						if (biteContent) {
-							retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'> ';	
+							if (!content.after) content.after = ' ';
+							retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'>' + content.after;
 						}
 					}
 				}
-			}	
+			}
 			return retStr;
-		};		
-		return biteHelper(htmlObject);	
+		};
+		return biteHelper(htmlObject);
 	}
 
 	function truncate() {
@@ -127,7 +130,7 @@
 			bite,
 			text,
 			htmlObject;
-
+		
 		/* Reset the field to the original string. */
 		this.html(str);
 		text = this.text();
@@ -158,7 +161,7 @@
 				bite = utils.eatStr(str, side, length - bite_size, fill);
 
 				if (parseHTML && htmlObject) {
-					bite = rebuildHtmlFromBite(bite, htmlObject, fill);	
+					bite = rebuildHtmlFromBite(bite, htmlObject, fill);
 				}
 				
 				this.html(bite);
