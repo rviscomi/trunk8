@@ -267,84 +267,84 @@
 	utils = {
 		/** Replaces [bite_size] [side]-most chars in [str] with [fill]. */
 		eatStr: function (str, side, bite_size, fill) {
-		    var length = str.length,
-		    	key = utils.eatStr.generateKey.apply(null, arguments),
-		        half_length,
-		        half_bite_size;
+			var length = str.length,
+				key = utils.eatStr.generateKey.apply(null, arguments),
+				half_length,
+				half_bite_size;
 
-	        /* If the result is already in the cache, return it. */
-	        if (utils.eatStr.cache[key]) {
+			/* If the result is already in the cache, return it. */
+			if (utils.eatStr.cache[key]) {
 				return utils.eatStr.cache[key];
-	        }
-	        
+			}
+			
 			/* Common error handling. */
-		    if ((typeof str !== 'string') || (length === 0)) {
-		    	$.error('Invalid source string "' + str + '".');
-		    }
-		    if ((bite_size < 0) || (bite_size > length)) {
-		    	$.error('Invalid bite size "' + bite_size + '".');
-		    }
-		    else if (bite_size === 0) {
-			    /* No bite should show no truncation. */
+			if ((typeof str !== 'string') || (length === 0)) {
+				$.error('Invalid source string "' + str + '".');
+			}
+			if ((bite_size < 0) || (bite_size > length)) {
+				$.error('Invalid bite size "' + bite_size + '".');
+			}
+			else if (bite_size === 0) {
+				/* No bite should show no truncation. */
 				return str;
-		    }
-		    if (typeof (fill + '') !== 'string') {
+			}
+			if (typeof (fill + '') !== 'string') {
 				$.error('Fill unable to be converted to a string.');
-		    }
+			}
 
 			/* Compute the result, store it in the cache, and return it. */
-		    switch (side) {
-		        case SIDES.right:
-			        /* str... */
-		            return utils.eatStr.cache[key] =
-			            	$.trim(str.substr(0, length - bite_size)) + fill;
-		            
-		        case SIDES.left:
-			        /* ...str */
-		            return utils.eatStr.cache[key] =
-			            	fill + $.trim(str.substr(bite_size));
-		            
-		        case SIDES.center:
-			        /* Bit-shift to the right by one === Math.floor(x / 2) */
-		            half_length = length >> 1; // halve the length
-		            half_bite_size = bite_size >> 1; // halve the bite_size
+			switch (side) {
+				case SIDES.right:
+					/* str... */
+					return utils.eatStr.cache[key] =
+							$.trim(str.substr(0, length - bite_size)) + fill;
+					
+				case SIDES.left:
+					/* ...str */
+					return utils.eatStr.cache[key] =
+							fill + $.trim(str.substr(bite_size));
+					
+				case SIDES.center:
+					/* Bit-shift to the right by one === Math.floor(x / 2) */
+					half_length = length >> 1; // halve the length
+					half_bite_size = bite_size >> 1; // halve the bite_size
 
-			        /* st...r */
-		            return utils.eatStr.cache[key] =
-			            	$.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
-		            		fill +
-		            		$.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
-		            
-		        default:
-		        	$.error('Invalid side "' + side + '".');
-		    }
+					/* st...r */
+					return utils.eatStr.cache[key] =
+							$.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
+							fill +
+							$.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
+					
+				default:
+					$.error('Invalid side "' + side + '".');
+			}
 		},
 		
 		getLineHeight: function (elem) {
-	            var floats = $(elem).css('float');
-	            if (floats !== 'none') {
-	                $(elem).css('float', 'none');
-	            }
-	            var pos = $(elem).css('position');
-	            if (pos === 'absolute') {
-	                $(elem).css('position', 'static');
-	            }
+				var floats = $(elem).css('float');
+				if (floats !== 'none') {
+					$(elem).css('float', 'none');
+				}
+				var pos = $(elem).css('position');
+				if (pos === 'absolute') {
+					$(elem).css('position', 'static');
+				}
 	
-	            var html = $(elem).html(),
-		        wrapper_id = 'line-height-test',
-		        line_height;
+				var html = $(elem).html(),
+				wrapper_id = 'line-height-test',
+				line_height;
 	
-	            /* Set the content to a small single character and wrap. */
-	            $(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
+				/* Set the content to a small single character and wrap. */
+				$(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
 	
-	            /* Calculate the line height by measuring the wrapper.*/
-	            line_height = $('#' + wrapper_id).innerHeight();
+				/* Calculate the line height by measuring the wrapper.*/
+				line_height = $('#' + wrapper_id).innerHeight();
 	
-	            /* Remove the wrapper and reset the content. */
-	            $(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
+				/* Remove the wrapper and reset the content. */
+				$(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
 	
-	            return line_height;
-	        }
+				return line_height;
+			}
 	};
 
 	utils.eatStr.cache = {};
