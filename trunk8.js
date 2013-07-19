@@ -78,40 +78,53 @@
 		// truncated and re-build the original HTML
 		// tags around the processed string.
 		bite = bite.replace(fill, '');
-		var biteHelper = function(contentArr) {
-			var retStr = '',
-				content,
-				biteContent,
-				biteLength,
-				nextWord,
-				i;
-			for (i = 0; i < contentArr.length; i++) {
-				content = contentArr[i];
-				biteLength = $.trim(bite).split(' ').length;
-				if ($.trim(bite).length) {
-					if (typeof content === 'string') {
-						if (!/<br\s*\/?>/.test(content)) {
-							if (biteLength === 1 && $.trim(bite).length <= content.length) {
-								content = bite + fill;
-								bite = '';
-							} else {
-								bite = bite.replace(content, '');
+
+		var biteHelper = function(contentArr, tagInfo) {
+				var retStr = '',
+					content,
+					biteContent,
+					biteLength,
+					nextWord,
+					i;
+				for (i = 0; i < contentArr.length; i++) {
+					content = contentArr[i];
+					biteLength = $.trim(bite).split(' ').length;
+					if ($.trim(bite).length) {
+						if (typeof content === 'string') {
+							if (!/<br\s*\/?>/.test(content)) {
+								if (biteLength === 1 && $.trim(bite).length <= content.length) {
+									content = bite;
+									// We want the fill to go inside of the last HTML
+									// element if the element is a container.
+									if (tagInfo === 'p' || tagInfo === 'div') {
+										content += fill;
+									}
+									bite = '';
+								} else {
+									bite = bite.replace(content, '');
+								}
 							}
-						}
-						retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
-					} else {
-						biteContent = biteHelper(content.content);
-						if (content.after) bite = bite.replace(content.after, '');
-						if (biteContent) {
-							if (!content.after) content.after = ' ';
-							retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'>' + content.after;
+							retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
+						} else {
+							biteContent = biteHelper(content.content, content.tag);
+							if (content.after) bite = bite.replace(content.after, '');
+							if (biteContent) {
+								if (!content.after) content.after = ' ';
+								retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'>' + content.after;
+							}
 						}
 					}
 				}
-			}
-			return retStr;
-		};
-		return biteHelper(htmlObject);
+				return retStr;
+			},
+			htmlResults = biteHelper(htmlObject);
+
+		// Add fill if doesn't exist. This will place it outside the HTML elements.
+		if (htmlResults.slice(htmlResults.length - fill.length) === fill) {
+			htmlResults += fill;
+		}
+
+		return htmlResults;
 	}
 
 	function truncate() {
