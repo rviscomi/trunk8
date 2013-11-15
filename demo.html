@@ -38,6 +38,10 @@
 		<div>
 			<button id="retrunk8">Retrunk8</button>
 		</div>
+
+		<div>
+			<button id="words">Word Boundary: " "</button>
+		</div>
 		
 		<div>
 			<label>Left <input type="radio" name="trunk8side" value="left"/></label>
@@ -73,7 +77,11 @@ $(document).ready(function () {
 			prop;
 
 		for (prop in settings) {
-			props.push('    '+prop+': '+settings[prop]);
+            setting = settings[prop];
+            if( setting === ' ' ) {
+              setting = '" "';
+            }
+			props.push('    '+prop+': '+setting);
 		}
 
 		$('#settings').html('settings = {<br/>' + props.join(',<br/>') + '<br/>}');
@@ -146,6 +154,22 @@ $(document).ready(function () {
 	$('#fill').change(function () {
 		$('#txt').trunk8({fill: this.value});
 		updateSettings($('#txt').trunk8('getSettings'));
+	});
+
+	$('#words').click(function () {
+		var settings = $('#txt').trunk8('getSettings');
+        if( typeof settings.wordBoundary === 'string' ) {
+          settings.wordBoundary = undefined;
+          $('#words').html('Word Boundary: " "');
+
+        }
+        else {
+          settings.wordBoundary = ' ' ;
+          $('#words').html('Word Boundary: undefined');
+        }
+
+		$('#txt').trunk8({wordBoundary: settings.wordBoundary});
+		updateSettings(settings);
 	});
 });
 		</script>
