@@ -196,27 +196,19 @@
 			this.html('');
 			
 			/* Display the biggest bite. */
-            if( typeof wordBoundary === 'string' ) {
-                var index = max_bite.length - fill.length - 1;
+			if( typeof wordBoundary === 'string' ) {
+				var index = max_bite.length - fill.length - 1;
 
-                console.debug('index: ' + index + ' is ' +
-                    max_bite.charAt(index))
+				while(wordBoundary.indexOf(max_bite.charAt(index))) {
+					index -= 1
+					if( index == 0 ) {
+						break;
+					}
+				}
 
-                var test = wordBoundary.indexOf(max_bite.charAt(index))
-                while(test == -1) {
-                    index -= 1
-                    if( index == 0 ) {
-                        break;
-                    }
-
-                    console.debug('index: ' + index + ' is ' +
-                        max_bite.charAt(index))
-                    test = wordBoundary.indexOf(max_bite.charAt(index))
-                }
-
-                max_bite = max_bite.substring(0, index);
-                max_bite += fill;
-            }
+				max_bite = max_bite.substring(0, index);
+				max_bite += fill;
+			}
 			this.html(max_bite);
 			
 			if (settings.tooltip) {

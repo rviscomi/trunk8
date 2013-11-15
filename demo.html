@@ -158,15 +158,14 @@ $(document).ready(function () {
 
 	$('#words').click(function () {
 		var settings = $('#txt').trunk8('getSettings');
-        if( typeof settings.wordBoundary === 'string' ) {
-          settings.wordBoundary = undefined;
-          $('#words').html('Word Boundary: " "');
-
-        }
-        else {
-          settings.wordBoundary = ' ' ;
-          $('#words').html('Word Boundary: undefined');
-        }
+		if( typeof settings.wordBoundary === 'string' ) {
+		      settings.wordBoundary = undefined;
+		      $('#words').html('Word Boundary: " "');
+		}
+		else {
+		      settings.wordBoundary = ' ' ;
+		      $('#words').html('Word Boundary: undefined');
+		}
 
 		$('#txt').trunk8({wordBoundary: settings.wordBoundary});
 		updateSettings(settings);
