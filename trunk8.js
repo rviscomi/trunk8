@@ -27,6 +27,9 @@
 		this.$element = $(element);
 		this.original_text = this.$element.html();
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
+		if(this.$element.attr('trunk8_lines')) {
+			this.settings.lines = 1*this.$element.attr('trunk8_lines');
+		}
 	}
 	
 	trunk8.prototype.updateSettings = function (options) {
