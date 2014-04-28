@@ -133,7 +133,7 @@
 			width = settings.width,
 			side = settings.side,
 			fill = settings.fill,
-			parseHTML = settings.parseHTML,
+			parseHTML = settings.parseHTML && settings.parseHTML !== 'false',
 			line_height = utils.getLineHeight(this) * settings.lines,
 			str = data.original_text,
 			length = str.length,
@@ -197,7 +197,7 @@
 			/* Display the biggest bite. */
 			this.html(max_bite);
 			
-			if (settings.tooltip) {
+			if (settings.tooltip && settings.tooltip !== 'false') {
 				this.attr('title', text);
 			}
 		}
@@ -208,7 +208,7 @@
 
 			this.html(bite);
 			
-			if (settings.tooltip) {
+			if (settings.tooltip && settings.tooltip !== 'false') {
 				this.attr('title', str);
 			}
 		}
@@ -226,8 +226,18 @@
 				if (!data) {
 					$this.data('trunk8', (data = new trunk8(this)));
 				}
-				
+				// add data-trunk8-* support
+				var elAttr = {};
+				var attributes = $this[0].attributes;
+				if(attributes) {
+					$.each(attributes,function(index,atr){
+						if(atr.name.indexOf('data-trunk8-') == 0) {
+							elAttr[atr.name.substring(12)] = atr.value;
+						}
+					});
+				}
 				data.updateSettings(options);
+				data.updateSettings(elAttr);
 				
 				truncate.call($this);
 			});
