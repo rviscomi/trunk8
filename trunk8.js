@@ -36,7 +36,12 @@
 	function stripHTML(html) {
 		var tmp = document.createElement("DIV");
 		tmp.innerHTML = html;
-		return tmp.textContent||tmp.innerText;
+		
+		if (typeof tmp.textContent != 'undefined') {
+			return tmp.textContent;
+		}
+
+		return tmp.innerText
 	}
 
 	function getHtmlArr(str) {
