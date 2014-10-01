@@ -140,6 +140,7 @@
 			fill = settings.fill,
 			parseHTML = settings.parseHTML,
 			line_height = utils.getLineHeight(this) * settings.lines,
+			onTruncate = settings.onTruncate,
 			str = data.original_text,
 			length = str.length,
 			max_bite = '',
@@ -219,7 +220,9 @@
 		}
 		else {
 			$.error('Invalid width "' + width + '".');
+			return;
 		}
+		onTruncate();
 	}
 
 	methods = {
@@ -376,6 +379,7 @@
 		side: SIDES.right,
 		tooltip: true,
 		width: WIDTH.auto,
-		parseHTML: false
+		parseHTML: false,
+		onTruncate: function () {}
 	};
 })(jQuery);
