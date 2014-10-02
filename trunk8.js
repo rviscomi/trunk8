@@ -219,7 +219,9 @@
 		}
 		else {
 			$.error('Invalid width "' + width + '".');
+			return;
 		}
+		settings.onTruncate();
 	}
 
 	methods = {
@@ -376,6 +378,7 @@
 		side: SIDES.right,
 		tooltip: true,
 		width: WIDTH.auto,
-		parseHTML: false
+		parseHTML: false,
+		onTruncate: function () {}
 	};
 })(jQuery);
