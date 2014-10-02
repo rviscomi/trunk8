@@ -25,7 +25,7 @@
 	
 	function trunk8(element) {
 		this.$element = $(element);
-		this.original_text = this.$element.html();
+		this.original_text = this.$element.html().trim();
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
 	
