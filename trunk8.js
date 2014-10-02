@@ -140,7 +140,6 @@
 			fill = settings.fill,
 			parseHTML = settings.parseHTML,
 			line_height = utils.getLineHeight(this) * settings.lines,
-			onTruncate = settings.onTruncate,
 			str = data.original_text,
 			length = str.length,
 			max_bite = '',
@@ -222,7 +221,7 @@
 			$.error('Invalid width "' + width + '".');
 			return;
 		}
-		onTruncate();
+		settings.onTruncate();
 	}
 
 	methods = {
