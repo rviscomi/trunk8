@@ -25,7 +25,7 @@
 	
 	function trunk8(element) {
 		this.$element = $(element);
-		this.original_text = this.$element.html();
+		this.original_text = this.$element.html().trim();
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
 	
@@ -36,7 +36,12 @@
 	function stripHTML(html) {
 		var tmp = document.createElement("DIV");
 		tmp.innerHTML = html;
-		return tmp.textContent||tmp.innerText;
+		
+		if (typeof tmp.textContent != 'undefined') {
+			return tmp.textContent;
+		}
+
+		return tmp.innerText
 	}
 
 	function getHtmlArr(str) {
@@ -214,7 +219,9 @@
 		}
 		else {
 			$.error('Invalid width "' + width + '".');
+			return;
 		}
+		settings.onTruncate();
 	}
 
 	methods = {
@@ -383,6 +390,7 @@
 		side: SIDES.right,
 		tooltip: true,
 		width: WIDTH.auto,
-		parseHTML: false
+		parseHTML: false,
+		onTruncate: function () {}
 	};
 })(jQuery);
