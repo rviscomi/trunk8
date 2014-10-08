@@ -226,27 +226,28 @@
 
 	methods = {
 		init: function (options) {
-			// data-trunk8-* config prefix
-			var trunk8DataAttributeName = 'data-trunk8-';
 			return this.each(function () {
 				var $this = $(this),
-					data = $this.data('trunk8');
+					data = $this.data('trunk8'),
+					trunk8DataAttributeName = 'data-trunk8-';
 				
 				if (!data) {
 					$this.data('trunk8', (data = new trunk8(this)));
 				}
 				// add data-trunk8-* support
-				var elementAttributes = {};
-				var attributes = this.attributes;
+				var elementAttributes = {},
+					attributes = this.attributes,
+					optionName;
 				if (attributes) {
-					$.each(attributes,function (index,attribute) {
+					$.each(attributes, function (index, attribute) {
 						if (attribute.name.indexOf(trunk8DataAttributeName) == 0) {
-							elementAttributes[attribute.name.substring(trunk8DataAttributeName.length)] = attribute.value;
+							optionName = attribute.name.substring(trunk8DataAttributeName.length);
+							elementAttributes[optionName] = attribute.value;
 						}
 					});
 				}
+				options = $.extend(options, elementAttributes);
 				data.updateSettings(options);
-				data.updateSettings(elementAttributes);
 				
 				truncate.call($this);
 			});
