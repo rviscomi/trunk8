@@ -59,6 +59,18 @@
 				</select>
 			</label>
 		</div>
+
+		<div>
+			<label>
+				Split On
+				
+				<select id="spliton">
+					<option value="false" selected>false (no splitting turned on)</option>
+					<option value="\s">\s</option>
+					<option value="[aeiou]">[aeiou] (vowels)</option>
+				</select>
+			</label>
+		</div>
 		
 		<div>
 			<pre id="settings"></pre>
@@ -147,6 +159,17 @@ $(document).ready(function () {
 		$('#txt').trunk8({fill: this.value});
 		updateSettings($('#txt').trunk8('getSettings'));
 	});
+
+	$('#spliton').change(function () {
+    if(this.value === 'false')
+      value = false;
+    else
+      value = this.value;
+
+		$('#txt').trunk8({splitOn: value});
+		updateSettings($('#txt').trunk8('getSettings'));
+	});
+
 });
 		</script>
 	</body>
