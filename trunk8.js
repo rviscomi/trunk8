@@ -139,6 +139,7 @@
 			side = settings.side,
 			fill = settings.fill,
 			parseHTML = settings.parseHTML,
+			splitOn = settings.splitOn,
 			line_height = utils.getLineHeight(this) * settings.lines,
 			str = data.original_text,
 			length = str.length,
@@ -178,6 +179,10 @@
 				
 				bite = utils.eatStr(str, side, length - bite_size, fill);
 
+			if(splitOn) {
+				bite = utils.eatFromLastOccurance(bite, splitOn, side, fill);
+			}
+
 				if (parseHTML && htmlObject) {
 					bite = rebuildHtmlFromBite(bite, htmlObject, fill);
 				}
@@ -210,6 +215,10 @@
 			bite_size = length - width;
 
 			bite = utils.eatStr(str, side, bite_size, fill);
+
+			if(splitOn) {
+				bite = utils.eatFromLastOccurance(bite, splitOn, side, fill);
+			}
 
 			this.html(bite);
 			
@@ -351,7 +360,41 @@
 				$(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
 	
 				return line_height;
+		},
+
+		eatFromLastOccurance: function (str, splitOn, side, fill) {
+			/* Executes the following algorithm to support splitting on a regex:
+			 * 1. determine which side to trim
+			 * 2. remove the filled text
+			 * 3. iterate on substrings checking for regex to split on
+			 * 4. trim the text to that point
+			 * 5. add the fill text back
+			 */
+			switch (side) {
+				case SIDES.right:
+					str = str.replace(new RegExp(fill + '$'), '');
+					splitOn = new RegExp(splitOn + '$');
+					while (str.length > 0 && !str.match(splitOn)) {
+						str = str.slice(0, -1);
+					}
+					str = str + fill;
+					break;
+
+				case SIDES.left:
+					str = str.replace(new RegExp('^' + fill), '');
+					splitOn = new RegExp('^' + splitOn);
+					while (str.length > 0 && !str.match(splitOn)) {
+						str = str.slice(1);
+					}
+					str = fill + str;
+					break;
+
+				default:
+					break;
 			}
+
+			return str;
+		}
 	};
 
 	utils.eatStr.cache = {};
@@ -379,6 +422,7 @@
 		tooltip: true,
 		width: WIDTH.auto,
 		parseHTML: false,
+		splitOn: false,
 		onTruncate: function () {}
 	};
 })(jQuery);
