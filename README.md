@@ -47,6 +47,8 @@ Settings
 * **side** _(Default: `'right'`)_ The side of the text from which to truncate. Valid values include `'center'`, `'left'`, and `'right'`.
 * **tooltip** _(Default: `true`)_ When true, the `title` attribute of the targeted HTML element will be set to the original, untruncated string. Valid values include `true` and `false`.
 * **width** _(Default: `'auto'`)_ The width, in characters, of the desired text. When set to `'auto'`, trunk8 will maximize the amount of text without spilling over.
+* **parseHTML** _(Default: `'false'`)_ When true, parse and save html structure and restore structure in the truncated text.
+* **onTruncate** _(Callback)_: Called after truncation is completed.
 
 Public Methods
 -------
