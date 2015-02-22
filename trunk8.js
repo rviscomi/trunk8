@@ -96,7 +96,7 @@
 					biteLength = $.trim(bite).split(' ').length;
 					if ($.trim(bite).length) {
 						if (typeof content === 'string') {
-							if (!/<br\s*\/?>/.test(content)) {
+							if (!/<br\s*\/?>/i.test(content)) {
 								if (biteLength === 1 && $.trim(bite).length <= content.length) {
 									content = bite;
 									// We want the fill to go inside of the last HTML
