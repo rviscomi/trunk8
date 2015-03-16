@@ -125,7 +125,7 @@
 			htmlResults = biteHelper(htmlObject);
 
 		// Add fill if doesn't exist. This will place it outside the HTML elements.
-		if (htmlResults.slice(htmlResults.length - fill.length) === fill) {
+		if (htmlResults.slice(htmlResults.length - fill.length) !== fill) {
 			htmlResults += fill;
 		}
 
