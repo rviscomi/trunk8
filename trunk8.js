@@ -345,7 +345,7 @@
 				$(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
 
 				/* Calculate the line height by measuring the wrapper.*/
-				line_height = $('#' + wrapper_id).innerHeight();
+				line_height = $('#' + wrapper_id).actual('height');
 
 				/* Remove the wrapper and reset the content. */
 				$(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
