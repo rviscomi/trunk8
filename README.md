@@ -29,6 +29,41 @@ $('.too-long').trunk8('update', new_string); // Lorem ipsum dolor sit amet, cons
 
 To invoke built-in trunk8 methods, supply the method name as a string. Method arguments are listed after the method name as necessary. See the section below entitled Methods for a full specification.
 
+**Pre-Rendered Content**
+
+To use trunk8 without the jumpy behavior when the page finishes loading and truncation has been completed, add an `overflow-y: hidden` and fixed height to the element that needs to be truncated. Also add a hidden class if you don't have that already.
+
+```css
+.overflow-hidden {
+    overflow-y: hidden;
+    height: 4.5em;
+}
+
+.hidden {
+    display: none !important;
+}
+```
+You can use LESS or SASS to calculate the height based on the number of lines that you set in trunk8. For example:
+* the number of lines shown after truncation is 3
+* the line-height on your page or the element that needs truncation is 1.5em
+
+Height of your overflow-hidden element will be `3 * 1.5em = 4.5em`.
+
+Add a dummy element that is used by trunk8 to calculate the truncation (as this doesn't work on elements with `overflow-y: hidden`)
+```html
+<p class="overflow-hidden">Very long text</p>
+<p class="truncate hidden"></p>
+```
+
+Set the overflow-hidden element in the trunk8 settings
+```js
+var options = {
+    usePreRenderElement: true,
+    preRenderElement: $('p.overflow-hidden');
+}
+$('p.truncate').trunk8(options);
+```
+
 **Custom Settings**
 ```js
 $('.too-long').trunk8({
@@ -48,6 +83,8 @@ Settings
 * **tooltip** _(Default: `true`)_ When true, the `title` attribute of the targeted HTML element will be set to the original, untruncated string. Valid values include `true` and `false`.
 * **width** _(Default: `'auto'`)_ The width, in characters, of the desired text. When set to `'auto'`, trunk8 will maximize the amount of text without spilling over.
 * **parseHTML** _(Default: `'false'`)_ When true, parse and save html structure and restore structure in the truncated text.
+* **usePreRenderElement** _(Default: `'false'`)_ When true, enable pre-render functionality.
+* **preRenderElement** _(Default: `'undefined'`)_ When set, this is the element that contains the content and will be updated with the truncated content once it's done.
 * **onTruncate** _(Callback)_: Called after truncation is completed.
 
 Public Methods
