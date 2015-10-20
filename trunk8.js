@@ -21,11 +21,11 @@
 		},
 		WIDTH = {
 			auto: 'auto'
-	};
+		};
 
 	function trunk8(element) {
 		this.$element = $(element);
-		this.original_text = $.trim(this.$element.html();
+		this.original_text = $.trim(this.$element.html());
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
 
@@ -51,7 +51,7 @@
 			return str.split(/\s/g);
 		}
 		var allResults = [],
-			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
+			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>))<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
 			outArr = reg.exec(str),
 			lastI,
 			ind;
@@ -71,7 +71,7 @@
 		}
 		for (ind = 0; ind < allResults.length; ind++) {
 			if (typeof allResults[ind] !== 'string' &&
-				allResults[ind].content) {
+					allResults[ind].content) {
 				allResults[ind].content = getHtmlArr(allResults[ind].content);
 			}
 		}
@@ -96,7 +96,7 @@
 					biteLength = $.trim(bite).split(' ').length;
 					if ($.trim(bite).length) {
 						if (typeof content === 'string') {
-							if (!/<br\s*\/?>/.test(content)) {
+							if (!/<br\s*\/?>/i.test(content)) {
 								if (biteLength === 1 && $.trim(bite).length <= content.length) {
 									content = bite;
 									// We want the fill to go inside of the last HTML
@@ -107,8 +107,8 @@
 									bite = '';
 								} else {
 									bite = bite.replace(content, '');
+								}
 							}
-						}
 							retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
 						} else {
 							biteContent = biteHelper(content.content, content.tag);
