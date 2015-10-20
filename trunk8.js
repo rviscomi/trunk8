@@ -1,31 +1,31 @@
 /**!
-* trunk8 v1.3.3
-* https://github.com/rviscomi/trunk8
-*
-* Copyright 2012 Rick Viscomi
-* Released under the MIT License.
-*
-* Date: September 26, 2012
-*/
+ * trunk8 v1.3.3
+ * https://github.com/rviscomi/trunk8
+ *
+ * Copyright 2012 Rick Viscomi
+ * Released under the MIT License.
+ *
+ * Date: September 26, 2012
+ */
 
 (function ($) {
 	var methods,
-	utils,
-	SIDES = {
-		/* cen...ter */
-		center: 'center',
-		/* ...left */
-		left: 'left',
-		/* right... */
-		right: 'right'
-	},
-	WIDTH = {
-		auto: 'auto'
+		utils,
+		SIDES = {
+			/* cen...ter */
+			center: 'center',
+			/* ...left */
+			left: 'left',
+			/* right... */
+			right: 'right'
+		},
+		WIDTH = {
+			auto: 'auto'
 	};
 
 	function trunk8(element) {
 		this.$element = $(element);
-		this.original_text = this.$element.html().trim();
+		this.original_text = $.trim(this.$element.html();
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
 
@@ -51,10 +51,10 @@
 			return str.split(/\s/g);
 		}
 		var allResults = [],
-		reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
-		outArr = reg.exec(str),
-		lastI,
-		ind;
+			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>)*)<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
+			outArr = reg.exec(str),
+			lastI,
+			ind;
 		while (outArr && lastI !== reg.lastIndex) {
 			lastI = reg.lastIndex;
 			if (outArr[5]) {
@@ -71,7 +71,7 @@
 		}
 		for (ind = 0; ind < allResults.length; ind++) {
 			if (typeof allResults[ind] !== 'string' &&
-			allResults[ind].content) {
+				allResults[ind].content) {
 				allResults[ind].content = getHtmlArr(allResults[ind].content);
 			}
 		}
@@ -85,44 +85,44 @@
 		bite = bite.replace(fill, '');
 
 		var biteHelper = function(contentArr, tagInfo) {
-			var retStr = '',
-			content,
-			biteContent,
-			biteLength,
-			nextWord,
-			i;
-			for (i = 0; i < contentArr.length; i++) {
-				content = contentArr[i];
-				biteLength = $.trim(bite).split(' ').length;
-				if ($.trim(bite).length) {
-					if (typeof content === 'string') {
-						if (!/<br\s*\/?>/.test(content)) {
-							if (biteLength === 1 && $.trim(bite).length <= content.length) {
-								content = bite;
-								// We want the fill to go inside of the last HTML
-								// element if the element is a container.
-								if (tagInfo === 'p' || tagInfo === 'div') {
-									content += fill;
-								}
-								bite = '';
-							} else {
-								bite = bite.replace(content, '');
+				var retStr = '',
+					content,
+					biteContent,
+					biteLength,
+					nextWord,
+					i;
+				for (i = 0; i < contentArr.length; i++) {
+					content = contentArr[i];
+					biteLength = $.trim(bite).split(' ').length;
+					if ($.trim(bite).length) {
+						if (typeof content === 'string') {
+							if (!/<br\s*\/?>/.test(content)) {
+								if (biteLength === 1 && $.trim(bite).length <= content.length) {
+									content = bite;
+									// We want the fill to go inside of the last HTML
+									// element if the element is a container.
+									if (tagInfo === 'p' || tagInfo === 'div') {
+										content += fill;
+									}
+									bite = '';
+								} else {
+									bite = bite.replace(content, '');
 							}
 						}
-						retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
-					} else {
-						biteContent = biteHelper(content.content, content.tag);
-						if (content.after) bite = bite.replace(content.after, '');
-						if (biteContent) {
-							if (!content.after) content.after = ' ';
-							retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'>' + content.after;
+							retStr += $.trim(content) + ((i === contentArr.length-1 || biteLength <= 1) ? '' : ' ');
+						} else {
+							biteContent = biteHelper(content.content, content.tag);
+							if (content.after) bite = bite.replace(content.after, '');
+							if (biteContent) {
+								if (!content.after) content.after = ' ';
+								retStr += '<'+content.tag+content.attribs+'>'+biteContent+'</'+content.tag+'>' + content.after;
+							}
 						}
 					}
 				}
-			}
-			return retStr;
-		},
-		htmlResults = biteHelper(htmlObject);
+				return retStr;
+			},
+			htmlResults = biteHelper(htmlObject);
 
 		// Add fill if doesn't exist. This will place it outside the HTML elements.
 		if (htmlResults.slice(htmlResults.length - fill.length) === fill) {
@@ -134,20 +134,20 @@
 
 	function truncate() {
 		var data = this.data('trunk8'),
-		settings = data.settings,
-		width = settings.width,
-		side = settings.side,
-		fill = settings.fill,
-		parseHTML = settings.parseHTML,
-		line_height = utils.getLineHeight(this) * settings.lines,
-		str = data.original_text,
-		length = str.length,
-		max_bite = '',
-		lower, upper,
-		bite_size,
-		bite,
-		text,
-		htmlObject;
+			settings = data.settings,
+			width = settings.width,
+			side = settings.side,
+			fill = settings.fill,
+			parseHTML = settings.parseHTML,
+			line_height = utils.getLineHeight(this) * settings.lines,
+			str = data.original_text,
+			length = str.length,
+			max_bite = '',
+			lower, upper,
+			bite_size,
+			bite,
+			text,
+			htmlObject;
 
 		/* Reset the field to the original string. */
 		this.html(str);
@@ -240,7 +240,7 @@
 		init: function (options) {
 			return this.each(function () {
 				var $this = $(this),
-				data = $this.data('trunk8');
+					data = $this.data('trunk8');
 
 				// Copy html from preRenderElement
 				if (options !== undefined && options.usePreRenderElement) {
@@ -292,9 +292,9 @@
 		/** Replaces [bite_size] [side]-most chars in [str] with [fill]. */
 		eatStr: function (str, side, bite_size, fill) {
 			var length = str.length,
-			key = utils.eatStr.generateKey.apply(null, arguments),
-			half_length,
-			half_bite_size;
+				key = utils.eatStr.generateKey.apply(null, arguments),
+				half_length,
+				half_bite_size;
 
 			/* If the result is already in the cache, return it. */
 			if (utils.eatStr.cache[key]) {
@@ -319,44 +319,44 @@
 			/* Compute the result, store it in the cache, and return it. */
 			switch (side) {
 				case SIDES.right:
-				/* str... */
-				return utils.eatStr.cache[key] =
-				$.trim(str.substr(0, length - bite_size)) + fill;
+					/* str... */
+					return utils.eatStr.cache[key] =
+							$.trim(str.substr(0, length - bite_size)) + fill;
 
 				case SIDES.left:
-				/* ...str */
-				return utils.eatStr.cache[key] =
-				fill + $.trim(str.substr(bite_size));
+					/* ...str */
+					return utils.eatStr.cache[key] =
+							fill + $.trim(str.substr(bite_size));
 
 				case SIDES.center:
-				/* Bit-shift to the right by one === Math.floor(x / 2) */
-				half_length = length >> 1; // halve the length
-				half_bite_size = bite_size >> 1; // halve the bite_size
+					/* Bit-shift to the right by one === Math.floor(x / 2) */
+					half_length = length >> 1; // halve the length
+					half_bite_size = bite_size >> 1; // halve the bite_size
 
-				/* st...r */
-				return utils.eatStr.cache[key] =
-				$.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
-				fill +
-				$.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
+					/* st...r */
+					return utils.eatStr.cache[key] =
+							$.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
+							fill +
+							$.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
 
 				default:
-				$.error('Invalid side "' + side + '".');
+					$.error('Invalid side "' + side + '".');
 			}
 		},
 
 		getLineHeight: function (elem) {
-			var html = $(elem).html();
+				var html = $(elem).html();
 
-			/* Set the content to a small single character and wrap. */
-			$(elem).html('i');
+				/* Set the content to a small single character and wrap. */
+				$(elem).html('i');
 
-			/* Calculate the line height by measuring the wrapper.*/
-			var line_height = utils.getHeight($(elem));
+				/* Calculate the line height by measuring the wrapper.*/
+				var line_height = utils.getHeight($(elem));
 
-			/* Reset the content. */
-			$(elem).html(html);
+				/* Reset the content. */
+				$(elem).html(html);
 
-			return line_height;
+				return line_height;
 		},
 
 		getHeight: function(elem) {
