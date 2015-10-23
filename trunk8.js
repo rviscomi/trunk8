@@ -139,6 +139,7 @@
 			side = settings.side,
 			fill = settings.fill,
 			parseHTML = settings.parseHTML,
+			wordWrap = settings.wordWrap,
 			line_height = utils.getLineHeight(this) * settings.lines,
 			str = data.original_text,
 			length = str.length,
@@ -201,6 +202,18 @@
 			
 			/* Display the biggest bite. */
 			this.html(max_bite);
+			
+			if(settings.wordWrap){
+				//https://regex101.com/r/eB1aK8/1
+				var max_bite_size = max_bite.length;
+				var regexp = new RegExp("(.{1,"+max_bite_size+"}([\\S])(?=(\\s))|.{1,"+max_bite_size+"})", "gmi");
+				
+				var match = regexp.exec(max_bite.replace(fill, ''));
+				
+				this.html('');
+				//TODO side.right / side.left
+				this.html(match[0] + fill);
+			}
 			
 			if (settings.tooltip) {
 				this.attr('title', text);
@@ -379,6 +392,7 @@
 		tooltip: true,
 		width: WIDTH.auto,
 		parseHTML: false,
-		onTruncate: function () {}
+		onTruncate: function () {},
+		wordWrap: true
 	};
 })(jQuery);
