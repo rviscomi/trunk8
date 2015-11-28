@@ -48,6 +48,10 @@
 		</div>
 		
 		<div>
+			<label>Word Wrap<input type="checkbox" id="wordWrap" checked/></label>
+		</div>
+		
+		<div>
 			<label>
 				Fill
 				
@@ -147,7 +151,22 @@ $(document).ready(function () {
 		$('#txt').trunk8({fill: this.value});
 		updateSettings($('#txt').trunk8('getSettings'));
 	});
+
+	$('#wordWrap').change(function () {
+		/* Get current settings. */
+		var settings = $('#txt').trunk8('getSettings');
+
+		/* Decrement the line count no lower than 1. */
+		settings.wordWrap = !settings.wordWrap
+
+		/* Save the new setting. */
+		$('#txt').trunk8({wordWrap: settings.wordWrap});
+
+		/* Update the UI. */
+		updateSettings(settings);
+	});
 });
+
 		</script>
 	</body>
 </html>

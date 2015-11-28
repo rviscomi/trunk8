@@ -205,14 +205,13 @@
 			
 			if(settings.wordWrap){
 				//https://regex101.com/r/eB1aK8/1
-				var max_bite_size = max_bite.length;
-				var regexp = new RegExp("(.{1,"+max_bite_size+"}([\\S])(?=(\\s))|.{1,"+max_bite_size+"})", "gmi");
 				
-				var match = regexp.exec(max_bite.replace(fill, ''));
-				
+				var wrapBiteSize = max_bite.replace(fill, '').length;
+				var regexp = new RegExp("\^(.{1," + wrapBiteSize + "}(?=(\\W|$))|\^.{1," + wrapBiteSize + "})", "gmi");
+				var match = regexp.exec(str);
 				this.html('');
 				//TODO side.right / side.left
-				this.html(match[0] + fill);
+				this.html($.trim(match[0]) + fill);
 			}
 			
 			if (settings.tooltip) {
@@ -285,6 +284,10 @@
 	};
 
 	utils = {
+		wordWrap: function(str, side, bite_size, fill){
+			
+		},
+		
 		/** Replaces [bite_size] [side]-most chars in [str] with [fill]. */
 		eatStr: function (str, side, bite_size, fill) {
 			var length = str.length,
