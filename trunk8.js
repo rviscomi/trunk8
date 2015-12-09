@@ -131,28 +131,6 @@
 
 		return htmlResults;
 	}
-	
-	function wrapWord(regexp, str, fill, side){
-		
-		switch (side) {
-				case SIDES.right:
-					return regexp.exec(str)[0] + fill;
-				case SIDES.left:					
-					return fill + regexp.exec(str.split("").reverse().join(""))[0].split("").reverse().join("");
-				case SIDES.center:
-				default:
-					$.error('Invalid side "' + side + '".');
-			}
-		
-		//TODO side.right / side.left
-		var result = '';
-		if(side == SIDES.left)
-			result = fill + match[0];
-		else
-			result = match[0] + fill;
-					
-		return result;
-	}
 
 	function truncate() {
 		var data = this.data('trunk8'),
@@ -219,13 +197,12 @@
 				}
 			}
 			
-			if(settings.wordWrap){
-				//https://regex101.com/r/eB1aK8/1
-
+			if(wordWrap){
+				/** If wordWrap is selected, we need the max_bite size without fill and apply the regex on str
+				 * because of how the word wrapping regex treats end of strings
+				 */
 				var wrapBiteSize = max_bite.replace(fill, '').length;
-				var regexp = new RegExp("\^(.{1," + wrapBiteSize + "}(?=(\\W|$))|\^.{1," + wrapBiteSize + "})", "gmi");
-				
-				max_bite = wrapWord(regexp, str, fill, settings.side);
+				max_bite = utils.wrapWord(wrapBiteSize, str, fill, settings.side);
 			}
 
 			/* Reset the content to eliminate possible existing scroll bars. */
@@ -304,8 +281,29 @@
 	};
 
 	utils = {
-		wordWrap: function(str, side, bite_size, fill){
+		wrapWord: function(wrapBiteSize, str, fill, side){
 			
+			/** https://regex101.com/r/eB1aK8/6 */
+			/** This regex wraps words from the text. As javascript doesn't have lookbehind, we'll need a workaround*/
+			var regexp = new RegExp("\^(.{1," + wrapBiteSize + "}(?=(\\W|$))|\^.{1," + wrapBiteSize + "})", "gmi");
+				
+			switch (side) {
+				case SIDES.right:
+					return regexp.exec(str)[0] + fill;
+				case SIDES.left:				
+					/* Workaround to reverse the string. I need this because javascript Regexp doesn't have lookbehind 
+					Need to revert str, apply the regex, revert the result again and after that, concatenate fill with it*/
+					return fill + regexp.exec(str.split("").reverse().join(""))[0].split("").reverse().join("");
+				case SIDES.center:
+					/* Bit-shift to the right by one === Math.floor(x / 2) */
+					var half_bite_size = wrapBiteSize >> 1;
+	
+					return 	utils.wrapWord(wrapBiteSize - half_bite_size, str, fill, SIDES.right) +
+							utils.wrapWord(half_bite_size, str, '', SIDES.left)
+					
+				default:
+					$.error('Invalid side "' + side + '".');
+			}
 		},
 		
 		/** Replaces [bite_size] [side]-most chars in [str] with [fill]. */
@@ -416,6 +414,6 @@
 		width: WIDTH.auto,
 		parseHTML: false,
 		onTruncate: function () {},
-		wordWrap: true
+		wordWrap: false
 	};
 })(jQuery);
