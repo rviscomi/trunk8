@@ -131,6 +131,28 @@
 
 		return htmlResults;
 	}
+	
+	function wrapWord(regexp, str, fill, side){
+		
+		switch (side) {
+				case SIDES.right:
+					return regexp.exec(str)[0] + fill;
+				case SIDES.left:					
+					return fill + regexp.exec(str.split("").reverse().join(""))[0].split("").reverse().join("");
+				case SIDES.center:
+				default:
+					$.error('Invalid side "' + side + '".');
+			}
+		
+		//TODO side.right / side.left
+		var result = '';
+		if(side == SIDES.left)
+			result = fill + match[0];
+		else
+			result = match[0] + fill;
+					
+		return result;
+	}
 
 	function truncate() {
 		var data = this.data('trunk8'),
@@ -196,23 +218,21 @@
 					max_bite = (max_bite.length > bite.length) ? max_bite : bite;
 				}
 			}
+			
+			if(settings.wordWrap){
+				//https://regex101.com/r/eB1aK8/1
+
+				var wrapBiteSize = max_bite.replace(fill, '').length;
+				var regexp = new RegExp("\^(.{1," + wrapBiteSize + "}(?=(\\W|$))|\^.{1," + wrapBiteSize + "})", "gmi");
+				
+				max_bite = wrapWord(regexp, str, fill, settings.side);
+			}
 
 			/* Reset the content to eliminate possible existing scroll bars. */
 			this.html('');
 			
 			/* Display the biggest bite. */
 			this.html(max_bite);
-			
-			if(settings.wordWrap){
-				//https://regex101.com/r/eB1aK8/1
-				
-				var wrapBiteSize = max_bite.replace(fill, '').length;
-				var regexp = new RegExp("\^(.{1," + wrapBiteSize + "}(?=(\\W|$))|\^.{1," + wrapBiteSize + "})", "gmi");
-				var match = regexp.exec(str);
-				this.html('');
-				//TODO side.right / side.left
-				this.html($.trim(match[0]) + fill);
-			}
 			
 			if (settings.tooltip) {
 				this.attr('title', text);
