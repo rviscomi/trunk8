@@ -20,7 +20,7 @@
 			right: 'right'
 		},
 		LINES = {
-		    auto: 'auto'
+			auto: 'auto'
 		},
 		WIDTH = {
 			auto: 'auto'
@@ -136,7 +136,7 @@
 	}
 
 	function truncate() {
-	    var data = this.data('trunk8'),
+		var data = this.data('trunk8'),
 			settings = data.settings,
 			width = settings.width,
 			side = settings.side,
@@ -146,7 +146,7 @@
 			str = data.original_text,
 			length = str.length,
 			max_bite = '',
-            line_height, get_height,
+			line_height, get_height,
 			lower, upper,
 			bite_size,
 			bite,
@@ -158,15 +158,15 @@
 		text = this.text();
 
 		if (lines === LINES.auto) {
-		    line_height = this.height();
-		    get_height = function (obj) { return $(obj).prop('scrollHeight'); }
+			line_height = this.height();
+			get_height = function (obj) { return $(obj).prop('scrollHeight'); }
 		} else if (!isNaN(lines)) {
-		    line_height = utils.getLineHeight(this) * lines;
-		    get_height = function (obj) { return $(obj).height(); }
+			line_height = utils.getLineHeight(this) * lines;
+			get_height = function (obj) { return $(obj).height(); }
 		} else {
-		    $.error('Invalid lines "' + lines + '".');
-		    return;
-        }
+			$.error('Invalid lines "' + lines + '".');
+			return;
+		}
 		
 
 		/* If string has HTML and parse HTML is set, build */
@@ -182,10 +182,10 @@
 			//if (this.height() <= line_height) {
 			//	/* Text is already at the optimal trunkage. */
 			//	return;
-		    //}
-		    if (get_height(this) <= line_height) {
-		        return;
-		    }
+			//}
+			if (get_height(this) <= line_height) {
+				return;
+			}
 
 			/* Binary search technique for finding the optimal trunkage. */
 			/* Find the maximum bite without overflowing. */
@@ -204,7 +204,7 @@
 				this.html(bite);
 
 				/* Check for overflow. */
-			    //if (this.height() > line_height) {
+				//if (this.height() > line_height) {
 				if (get_height(this) > line_height) {
 					upper = bite_size - 1;
 				}
