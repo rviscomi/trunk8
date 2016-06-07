@@ -43,7 +43,7 @@ Settings
 --------
 
 * **fill** _(Default: '`&hellip;`')_ The string to insert in place of the omitted text. This value may include HTML.
-* **lines** _(Default: `1`)_ The number of lines of text-wrap to tolerate before truncating. This value must be an integer greater than or equal to 1.
+* **lines** _(Default: `1`)_ The number of lines of text-wrap to tolerate before truncating. When set to `'auto`', trunk8 will use the height of the element.
 * **side** _(Default: `'right'`)_ The side of the text from which to truncate. Valid values include `'center'`, `'left'`, and `'right'`.
 * **tooltip** _(Default: `true`)_ When true, the `title` attribute of the targeted HTML element will be set to the original, untruncated string. Valid values include `true` and `false`.
 * **width** _(Default: `'auto'`)_ The width, in characters, of the desired text. When set to `'auto'`, trunk8 will maximize the amount of text without spilling over.
