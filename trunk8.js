@@ -51,7 +51,7 @@
 			return str.split(/\s/g);
 		}
 		var allResults = [],
-			reg = /<([a-z]+)([^<]*)(?:>(.*?(?!<\1>))<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
+			reg = /<([a-z]+)([^<]*)(?:>([\S\s]*?(?!<\1>))<\/\1>|\s+\/>)(['.?!,]*)|((?:[^<>\s])+['.?!,]*\w?|<br\s?\/?>)/ig,
 			outArr = reg.exec(str),
 			lastI,
 			ind;
@@ -125,7 +125,7 @@
 			htmlResults = biteHelper(htmlObject);
 
 		// Add fill if doesn't exist. This will place it outside the HTML elements.
-		if (htmlResults.slice(htmlResults.length - fill.length) === fill) {
+		if (htmlResults.slice(htmlResults.length - fill.length) !== fill) {
 			htmlResults += fill;
 		}
 
