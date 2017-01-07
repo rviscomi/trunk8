@@ -1,0 +1,30 @@
+{
+  "name": "trunk8",
+  "version": "0.0.1",
+  "description": "trunk8 is an intelligent text truncation extension to jQuery",
+  "main": "trunk8.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rviscomi/trunk8.git"
+  },
+  "keywords": [
+    "truncate",
+    "trunk8",
+    "jquery",
+    "text",
+    "cut-off",
+    "spill-over"
+  ],
+  "author": "Rick Viscomi (rviscomi@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rviscomi/trunk8/issues"
+  },
+  "homepage": "https://github.com/rviscomi/trunk8#readme",
+  "peerDependencies": {
+    "jquery": ">=1.7.1"
+  }
+}
