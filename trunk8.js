@@ -1,10 +1,10 @@
 /**!
  * trunk8 v1.3.3
  * https://github.com/rviscomi/trunk8
- * 
+ *
  * Copyright 2012 Rick Viscomi
  * Released under the MIT License.
- * 
+ *
  * Date: September 26, 2012
  */
 
@@ -30,13 +30,13 @@
 		WIDTH = {
 			auto: 'auto'
 		};
-	
+
 	function trunk8(element) {
 		this.$element = $(element);
 		this.original_text = $.trim(this.$element.html());
 		this.settings = $.extend({}, $.fn.trunk8.defaults);
 	}
-	
+
 	trunk8.prototype.updateSettings = function (options) {
 		this.settings = $.extend(this.settings, options);
 	};
@@ -44,7 +44,7 @@
 	function stripHTML(html) {
 		var tmp = document.createElement("DIV");
 		tmp.innerHTML = html;
-		
+
 		if (typeof tmp.textContent != 'undefined') {
 			return tmp.textContent;
 		}
@@ -156,7 +156,7 @@
 			bite,
 			text,
 			htmlObject;
-		
+
 		/* Reset the field to the original string. */
 		this.html(str);
 		text = this.text();
@@ -171,7 +171,7 @@
 
 		if (width === WIDTH.auto) {
 			/* Assuming there is no "overflow: hidden". */
-			if (this.height() <= line_height) {
+			if (utils.getHeight(this) <= line_height) {
 				/* Text is already at the optimal trunkage. */
 				return;
 			}
@@ -183,17 +183,17 @@
 
 			while (lower <= upper) {
 				bite_size = lower + ((upper - lower) >> 1);
-				
+
 				bite = utils.eatStr(str, side, length - bite_size, fill);
 
 				if (parseHTML && htmlObject) {
 					bite = rebuildHtmlFromBite(bite, htmlObject, fill);
 				}
-				
+
 				this.html(bite);
 
 				/* Check for overflow. */
-				if (this.height() > line_height) {
+				if (utils.getHeight(this) > line_height) {
 					upper = bite_size - 1;
 				}
 				else {
@@ -206,10 +206,10 @@
 
 			/* Reset the content to eliminate possible existing scroll bars. */
 			this.html('');
-			
+
 			/* Display the biggest bite. */
 			this.html(max_bite);
-			
+
 			if (settings.tooltip) {
 				this.attr('title', text);
 			}
@@ -220,7 +220,7 @@
 			bite = utils.eatStr(str, side, bite_size, fill);
 
 			this.html(bite);
-			
+
 			if (settings.tooltip) {
 				this.attr('title', str);
 			}
@@ -229,6 +229,18 @@
 			$.error('Invalid width "' + width + '".');
 			return;
 		}
+
+		// If we use pre-render element, replace it's content with our truncated element and show it.
+		// This prevents the 'jumping' of the page.
+		if (settings.usePreRenderElement) {
+			var truncatedElement = this.clone(true);
+
+			truncatedElement
+			.removeClass('hidden');
+
+			settings.preRenderElement.replaceWith(truncatedElement);
+		}
+
 		settings.onTruncate();
 	}
 
@@ -237,13 +249,18 @@
 			return this.each(function () {
 				var $this = $(this),
 					data = $this.data('trunk8');
-				
+
+				// Copy html from preRenderElement
+				if (options !== undefined && options.usePreRenderElement) {
+					$this.html(options.preRenderElement.html());
+				}
+
 				if (!data) {
 					$this.data('trunk8', (data = new trunk8(this)));
 				}
-				
+
 				data.updateSettings(options);
-				
+
 				truncate.call($this);
 			});
 		},
@@ -252,7 +269,7 @@
 		update: function (new_string) {
 			return this.each(function () {
 				var $this = $(this);
-				
+
 				/* Update text. */
 				if (new_string) {
 					$this.data('trunk8').original_text = new_string;
@@ -262,12 +279,12 @@
 				truncate.call($this);
 			});
 		},
-		
+
 		revert: function () {
 			return this.each(function () {
 				/* Get original text. */
 				var text = $(this).data('trunk8').original_text;
-				
+
 				/* Revert element to original text. */
 				$(this).html(text);
 			});
@@ -291,7 +308,7 @@
 			if (utils.eatStr.cache[key]) {
 				return utils.eatStr.cache[key];
 			}
-			
+
 			/* Common error handling. */
 			if ((typeof str !== 'string') || (length === 0)) {
 				$.error('Invalid source string "' + str + '".');
@@ -313,12 +330,12 @@
 					/* str... */
 					return utils.eatStr.cache[key] =
 							$.trim(str.substr(0, length - bite_size)) + fill;
-					
+
 				case SIDES.left:
 					/* ...str */
 					return utils.eatStr.cache[key] =
 							fill + $.trim(str.substr(bite_size));
-					
+
 				case SIDES.center:
 					/* Bit-shift to the right by one === Math.floor(x / 2) */
 					half_length = length >> 1; // halve the length
@@ -329,44 +346,72 @@
 							$.trim(utils.eatStr(str.substr(0, length - half_length), SIDES.right, bite_size - half_bite_size, '')) +
 							fill +
 							$.trim(utils.eatStr(str.substr(length - half_length), SIDES.left, half_bite_size, ''));
-					
+
 				default:
 					$.error('Invalid side "' + side + '".');
 			}
 		},
-		
+
 		getLineHeight: function (elem) {
-				var floats = $(elem).css('float');
-				if (floats !== 'none') {
-					$(elem).css('float', 'none');
-				}
-				var pos = $(elem).css('position');
-				if (pos === 'absolute') {
-					$(elem).css('position', 'static');
-				}
-	
-				var html = $(elem).html(),
-				wrapper_id = 'line-height-test',
-				line_height;
-	
+				var html = $(elem).html();
+
 				/* Set the content to a small single character and wrap. */
-				$(elem).html('i').wrap('<div id="' + wrapper_id + '" />');
-	
+				$(elem).html('i');
+
 				/* Calculate the line height by measuring the wrapper.*/
-				line_height = $('#' + wrapper_id).innerHeight();
-	
-				/* Remove the wrapper and reset the content. */
-				$(elem).html(html).css({ 'float': floats, 'position': pos }).unwrap();
-	
+				var line_height = utils.getHeight($(elem));
+
+				/* Reset the content. */
+				$(elem).html(html);
+
 				return line_height;
+		},
+
+		getHeight: function(elem) {
+			var height = elem.height();
+			if (height > 0) {
+				return height;
 			}
+			else {
+				// get all hidden parents
+				var tmp = [];
+				var $hidden = elem.parents().addBack().filter(':hidden');
+				var style = 'visibility: hidden !important; display: block !important; ';
+
+				// save the origin style props
+				// set the hidden el css to be got the actual value later
+				$hidden.each( function (){
+					// Save original style. If no style was set, attr() returns undefined
+					var elementStyle = elem.attr('style');
+
+					tmp.push(elementStyle);
+					// Retain as much of the original style as possible, if there is one
+					elem.attr('style', elementStyle ? elementStyle + ';' + style : style );
+				});
+
+				height = elem.height();
+
+				$hidden.each( function ( i ){
+					var _tmp = tmp[i];
+
+					if(_tmp === undefined) {
+						elem.removeAttr('style');
+					}
+					else {
+						elem.attr('style', _tmp);
+					}
+				});
+
+				return height;
+			}
+		}
 	};
 
 	utils.eatStr.cache = {};
 	utils.eatStr.generateKey = function () {
 		return Array.prototype.join.call(arguments, '');
 	};
-	
+
 	$.fn.trunk8 = function (method) {
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -378,7 +423,7 @@
 			$.error('Method ' + method + ' does not exist on jQuery.trunk8');
 		}
 	};
-	
+
 	/* Default trunk8 settings. */
 	$.fn.trunk8.defaults = {
 		fill: '&hellip;',
@@ -387,6 +432,8 @@
 		tooltip: true,
 		width: WIDTH.auto,
 		parseHTML: false,
+		usePreRenderElement: false,
+		preRenderElement: undefined,
 		onTruncate: function () {}
 	};
 }));
