@@ -229,7 +229,7 @@
 			$.error('Invalid width "' + width + '".');
 			return;
 		}
-		settings.onTruncate();
+		settings.onTruncate(this);
 	}
 
 	methods = {
@@ -387,6 +387,6 @@
 		tooltip: true,
 		width: WIDTH.auto,
 		parseHTML: false,
-		onTruncate: function () {}
+		onTruncate: function ($element) {}
 	};
 }));
