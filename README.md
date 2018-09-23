@@ -1,4 +1,4 @@
-trunk8
+trunk8 (THIS PROJECT IS NO LONGER MAINTAINED)
 ======
 
 About
