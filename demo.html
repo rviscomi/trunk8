@@ -10,6 +10,19 @@
 				width: 676px;
 			}
 			
+			#trunk8-responsive {
+				border: 2px solid #000;
+				line-height: 20px;
+				max-height: 20px;
+				overflow: hidden;
+			}
+			
+			@media (max-width: 767px) {
+				#trunk8-responsive {
+					max-height: 40px;
+				}
+			}
+			
 			.trunk8-fill {
 				color: #f00;
 				font-weight: bold;
@@ -64,19 +77,45 @@
 			<pre id="settings"></pre>
 		</div>
 		
+		
+		<div id="trunk8-responsive">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		</div>
+		
+		<div>
+			<pre id="css-responsive">
+#trunk8-responsive {
+  border: 2px solid #000;
+  line-height: 20px;
+  max-height: 20px;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  #trunk8-responsive {
+    max-height: 40px;
+  }
+}
+			</pre>
+			<pre id="settings-responsive"></pre>
+		</div>
+		
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script src="trunk8.js"></script>
 		<script>
 $(document).ready(function () {
-	function updateSettings(settings) {
+	function updateSettings(settings, id) {
 		var props = [],
 			prop;
+			debugger;
+		id = id || "#settings";
 
 		for (prop in settings) {
 			props.push('    '+prop+': '+settings[prop]);
 		}
 
-		$('#settings').html('settings = {<br/>' + props.join(',<br/>') + '<br/>}');
+		$(id).html('settings = {<br/>' + props.join(',<br/>') + '<br/>}');
 	}
 	
 	$('#txt').trunk8();
@@ -147,6 +186,13 @@ $(document).ready(function () {
 		$('#txt').trunk8({fill: this.value});
 		updateSettings($('#txt').trunk8('getSettings'));
 	});
+	
+	// Responsive
+	$('#trunk8-responsive').trunk8({lines: 'auto'});
+	
+	$(window).resize(function() { $('#trunk8-responsive').trunk8('update'); });
+	
+	updateSettings($('#trunk8-responsive').trunk8('getSettings'), "#settings-responsive");
 });
 		</script>
 	</body>
