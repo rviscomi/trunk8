@@ -216,9 +216,13 @@
 		}
 		else if (!isNaN(width)) {
 			bite_size = length - width;
-
+			
+			if (bite_size < 0) {
+				return;
+			}
+			
 			bite = utils.eatStr(str, side, bite_size, fill);
-
+			
 			this.html(bite);
 			
 			if (settings.tooltip) {
