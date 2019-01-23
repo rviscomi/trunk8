@@ -48,6 +48,7 @@ Settings
 * **tooltip** _(Default: `true`)_ When true, the `title` attribute of the targeted HTML element will be set to the original, untruncated string. Valid values include `true` and `false`.
 * **width** _(Default: `'auto'`)_ The width, in characters, of the desired text. When set to `'auto'`, trunk8 will maximize the amount of text without spilling over.
 * **parseHTML** _(Default: `'false'`)_ When true, parse and save html structure and restore structure in the truncated text.
+* **splitOn** _(Default: `'false'`)_ Takes and allow splitting on a regular expression. More commonly used to truncate to a whitespace. Takes into account the `side` option and trims only that side.
 * **onTruncate** _(Callback)_: Called after truncation is completed.
 
 Public Methods
