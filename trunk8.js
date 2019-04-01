@@ -146,7 +146,7 @@
 			width = settings.width,
 			side = settings.side,
 			fill = settings.fill,
-			parseHTML = settings.parseHTML,
+			parseHTML = settings.parseHTML && settings.parseHTML !== 'false',
 			line_height = utils.getLineHeight(this) * settings.lines,
 			str = data.original_text,
 			length = str.length,
@@ -210,7 +210,7 @@
 			/* Display the biggest bite. */
 			this.html(max_bite);
 			
-			if (settings.tooltip) {
+			if (settings.tooltip && settings.tooltip !== 'false') {
 				this.attr('title', text);
 			}
 		}
@@ -221,7 +221,7 @@
 
 			this.html(bite);
 			
-			if (settings.tooltip) {
+			if (settings.tooltip && settings.tooltip !== 'false') {
 				this.attr('title', str);
 			}
 		}
@@ -236,12 +236,25 @@
 		init: function (options) {
 			return this.each(function () {
 				var $this = $(this),
-					data = $this.data('trunk8');
+					data = $this.data('trunk8'),
+					trunk8DataAttributeName = 'data-trunk8-';
 				
 				if (!data) {
 					$this.data('trunk8', (data = new trunk8(this)));
 				}
-				
+				// add data-trunk8-* support
+				var elementAttributes = {},
+					attributes = this.attributes,
+					optionName;
+				if (attributes) {
+					$.each(attributes, function (index, attribute) {
+						if (attribute.name.indexOf(trunk8DataAttributeName) == 0) {
+							optionName = attribute.name.substring(trunk8DataAttributeName.length);
+							elementAttributes[optionName] = attribute.value;
+						}
+					});
+				}
+				options = $.extend(options, elementAttributes);
 				data.updateSettings(options);
 				
 				truncate.call($this);
